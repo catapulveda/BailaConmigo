@@ -6,8 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
@@ -15,6 +13,8 @@ public class MAIN extends javax.swing.JFrame {
 
     public MAIN() {
         initComponents();
+        
+        setTitle("Bienvenido "+MODEL.Usuario.getUsuario().getNombreusuario());
     }
 
     

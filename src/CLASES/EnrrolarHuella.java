@@ -37,7 +37,9 @@ public class EnrrolarHuella extends DIALOGOS.RegistrarHuella{
             try {
                 enrollador.addFeatures(caracteristicas);
             }catch(DPFPImageQualityException ex){
-                CLASES.Metodos.M("FALTA CALIDAD EN LA HUELLA", "advertencia.png");
+                CLASES.Metodos.ADVERTENCIA(
+                        CLASES.Idioma.idioma().getProperty("error"), 
+                        CLASES.Idioma.idioma().getProperty("huellamalacalidad"));
                 Logger.getLogger(EnrrolarHuella.class.getName()).log(Level.SEVERE, null, ex);
             }finally{
                 switch(enrollador.getFeaturesNeeded()){
@@ -69,14 +71,16 @@ public class EnrrolarHuella extends DIALOGOS.RegistrarHuella{
                                 enrollador.clear();
                                 detenerCaptura();
                                 lblPasos.setIcon(new ImageIcon(getClass().getResource("/imagenes/paso0.png")));
-                                Metodo.M("Las huellas detectadas no coinciden en su totalidad, intente nuevamente", "advertencia.png");
+                                CLASES.Metodos.ADVERTENCIA(
+                                        CLASES.Idioma.idioma().getProperty("error"), 
+                                        CLASES.Idioma.idioma().getProperty("huellanocoincide"));
                                 iniciarCaptura();
                                 break;                                
                             default: break;
                         }
             }
         }
-    }    
+    }
 
     public DPFPEnrollment getEnrollador() {
         return enrollador;

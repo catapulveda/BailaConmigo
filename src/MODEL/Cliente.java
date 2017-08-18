@@ -1,7 +1,9 @@
 package MODEL;
 
 import CLASES.ConexionPool;
+import java.io.ByteArrayInputStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-public class Cliente {
+public class Cliente extends Rol{
     
     private int idcliente;
     private String identificacion;
@@ -22,9 +24,15 @@ public class Cliente {
     private java.util.Date fechanacimiento;
     private int idusuario;
     private String codigopostal;
+    private byte[] huella;
+    private byte[] foto;
+    private String genero;
+    private int idrol;
+    private String username;
+    private String password;    
 
     public Cliente() {
-    }        
+    }
     
     public Cliente(int idcliente, String identificacion, String nombre, String apellido, String telefono, String direccion, String correo, Date fechanacimiento, int idusuario) {
         this.idcliente = idcliente;
@@ -118,6 +126,54 @@ public class Cliente {
         this.codigopostal = codigopostal;
     }
     
+    public byte[] getHuella() {
+        return huella;
+    }
+
+    public void setHuella(byte[] huella) {
+        this.huella = huella;
+    }
+
+    public byte[] getFoto() {
+        return foto;
+    }
+
+    public void setFoto(byte[] foto) {
+        this.foto = foto;
+    }
+    
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
+    public int getIdrol() {
+        return idrol;
+    }
+
+    public void setIdrol(int idrol) {
+        this.idrol = idrol;
+    }
+    
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
     public boolean registrarCliente(boolean guardar){
         
         if(getIdentificacion().isEmpty()){
@@ -155,20 +211,24 @@ public class Cliente {
                 sql += "INSERT INTO public.cliente(\n" +
                 "            identificacion, nombrecliente, apellidocliente, fechadenacimiento, \n" +
                 "            numerotelefonico, direccioncliente, correocliente, fechaderegistro, \n" +
-                "            idusuarioregistrador, codigopostal)\n" +
+                "            idusuarioregistrador, codigopostal, huella, foto)\n" +
                 "    VALUES ('"+getIdentificacion().trim()+"', '"+getNombre().trim()+"', '"+getApellido().trim()+"', '"+getFechanacimiento()+"', \n" +
                 "            '"+getTelefono()+"', '"+getDireccion()+"', '"+getCorreo()+"', '"+new java.util.Date()+"', \n" +
-                "            "+MODEL.Usuario.getUsuario().getIdusuario()+", '"+getCodigopostal()+"');";
+                "            "+getIdusuario()+", '"+getCodigopostal()+"', ?, ?);";
             }else{
                 sql += "UPDATE cliente SET(\n" +
                 "     identificacion='"+getIdentificacion().trim()+"', nombrecliente='"+getNombre().trim()+"', apellidocliente='"+getApellido().trim()+"', \n" +
                 "     fechadenacimiento='"+getFechanacimiento()+"', numerotelefonico='"+getTelefono()+"', direccioncliente='"+getDireccion()+"', \n" +
-                "     correocliente='"+getCorreo()+"', idusuarioactualizador="+MODEL.Usuario.getUsuario().getIdusuario()+" , codigopostal='"+getCodigopostal()+"' ";
+                "     correocliente='"+getCorreo()+"', idusuarioactualizador="+getIdusuario()+" , codigopostal='"+getCodigopostal()+"', huella=?, foto=? ";
             }
+            
             ConexionPool conexion = new ConexionPool();
             Connection con = null;
             try{
                 con = conexion.getDataSource().getConnection();
+                PreparedStatement pst = con.prepareStatement(sql);            
+                pst.setBinaryStream(1, new ByteArrayInputStream(foto), foto.length);
+                pst.setBinaryStream(2, (huella != null)?new ByteArrayInputStream(huella):null, (huella != null)?huella.length:0);
                 if(con.prepareStatement(sql).executeUpdate()>0){
                     return true;
                 }
@@ -185,6 +245,8 @@ public class Cliente {
         
         return false;
     }
+    
+    
 
     public boolean validarIdentificacion(String identificacion){
         ConexionPool conexion = new ConexionPool();
@@ -203,7 +265,6 @@ public class Cliente {
         }
         
         return true;
-    }
-    
+    }   
     
 }

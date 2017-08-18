@@ -1,8 +1,11 @@
 package DIALOGOS;
 
+import CLASES.HiloLogin;
+import MODEL.Cliente;
 import MODEL.Usuario;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.util.StringTokenizer;
 
 public class Login extends javax.swing.JFrame {
 
@@ -17,7 +20,7 @@ public class Login extends javax.swing.JFrame {
         lbluser.setText(CLASES.Idioma.idioma().getProperty("lbluser"));
         lblpass.setText(CLASES.Idioma.idioma().getProperty("lblpass"));
         btnEntrar.setText(CLASES.Idioma.idioma().getProperty("btnentrar"));
-        btnSalir.setText(CLASES.Idioma.idioma().getProperty("btnsalir"));
+        btnSalir.setText(CLASES.Idioma.idioma().getProperty("btnsalir"));        
         
         btnEntrar.addActionListener((ActionEvent e) ->{
             btnEntrar.setEnabled(false);
@@ -29,27 +32,34 @@ public class Login extends javax.swing.JFrame {
         
         cjusuario.grabFocus();
     }
+    
     public void entrar(){
-        MODEL.Usuario usuario = new Usuario();
-        if(usuario.iniciarSesion(cjusuario.getText(), cjpass.getText())){
-            this.dispose();
-            VISTAS.MAIN.main(null);
+        Usuario cliente = new Usuario();
+        HiloLogin hiloLogin = new HiloLogin();
+        hiloLogin.setUser(cjusuario.getText());
+        hiloLogin.setPass(cjpass.getText());
+        hiloLogin.setLbl(lblicon);
+        hiloLogin.execute();
+        if(hiloLogin.isLogin()){
+            dispose();
         }
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
+        jPanel1 = new javax.swing.JPanel();
+        lbluser = new javax.swing.JLabel();
         cjusuario = new CompuChiqui.JTextFieldPopup();
+        lblpass = new javax.swing.JLabel();
         cjpass = new javax.swing.JPasswordField();
+        lblicon = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
         btnEntrar = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
         btnSalir = new javax.swing.JButton();
-        lbluser = new javax.swing.JLabel();
-        lblpass = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Iniciar sesion");
@@ -71,14 +81,59 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        lbluser.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        lbluser.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbluser.setText("Usuario:");
+        lbluser.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
+        jPanel1.add(lbluser, gridBagConstraints);
+
         cjusuario.setCampodetexto(cjpass);
         cjusuario.setPlaceholder("Usuario");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 9, 5, 10);
+        jPanel1.add(cjusuario, gridBagConstraints);
+
+        lblpass.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        lblpass.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblpass.setText("Contraseña:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
+        jPanel1.add(lblpass, gridBagConstraints);
 
         cjpass.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 cjpassKeyTyped(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 9, 5, 10);
+        jPanel1.add(cjpass, gridBagConstraints);
+
+        lblicon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/locked.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        jPanel1.add(lblicon, gridBagConstraints);
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jToolBar1.setFloatable(false);
@@ -103,51 +158,29 @@ public class Login extends javax.swing.JFrame {
         });
         jToolBar1.add(btnSalir);
 
-        lbluser.setFont(new java.awt.Font("Ebrima", 0, 12)); // NOI18N
-        lbluser.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lbluser.setText("Usuario:");
-        lbluser.setToolTipText("");
-
-        lblpass.setFont(new java.awt.Font("Ebrima", 0, 12)); // NOI18N
-        lblpass.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblpass.setText("Contraseña:");
-
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/locked.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+        jPanel1.add(jToolBar1, gridBagConstraints);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblpass, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lbluser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(cjpass)
-                    .addComponent(cjusuario, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
-                .addContainerGap())
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(94, 94, 94)
-                .addComponent(jLabel3)
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cjusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbluser))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cjpass, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblpass))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -209,9 +242,10 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JPasswordField cjpass;
     private CompuChiqui.JTextFieldPopup cjusuario;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JLabel lblicon;
     private javax.swing.JLabel lblpass;
     private javax.swing.JLabel lbluser;
     // End of variables declaration//GEN-END:variables

@@ -1,12 +1,18 @@
 package DIALOGOS;
 
+import CLASES.EnrrolarHuella;
 import MODEL.Cliente;
+import MODEL.Rol;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 public class RegistrarCliente extends javax.swing.JDialog {
+    
+    EnrrolarHuella rh;
     
     public RegistrarCliente(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -30,6 +36,14 @@ public class RegistrarCliente extends javax.swing.JDialog {
         } catch (IOException ex) {
             Logger.getLogger(RegistrarCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        StringTokenizer token = new StringTokenizer(CLASES.Idioma.idioma().getProperty("genero"), ",");
+        while(token.hasMoreElements()){
+            comboGenero.addItem(token.nextElement().toString());
+        }
+        
+        java.util.List<Rol> roles = MODEL.Rol.getRoles();
+        roles.forEach(rol -> comboRol.addItem(rol));
     }
     
     @SuppressWarnings("unchecked")
@@ -54,6 +68,10 @@ public class RegistrarCliente extends javax.swing.JDialog {
         cjfechanacimiento = new com.toedter.calendar.JDateChooser();
         cjdireccion = new CompuChiqui.JTextFieldPopup();
         lbldireccion = new javax.swing.JLabel();
+        lblfechanacimiento1 = new javax.swing.JLabel();
+        comboRol = new javax.swing.JComboBox<>();
+        lblfechanacimiento2 = new javax.swing.JLabel();
+        comboGenero = new javax.swing.JComboBox<>();
         panelFoto = new JPanelWebCam.JPanelWebCam();
         jToolBar1 = new javax.swing.JToolBar();
         btnGuardar = new javax.swing.JButton();
@@ -206,6 +224,38 @@ public class RegistrarCliente extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 1, 0);
         panelRegistrarCliente.add(lbldireccion, gridBagConstraints);
 
+        lblfechanacimiento1.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        lblfechanacimiento1.setText("Rol:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 1, 0);
+        panelRegistrarCliente.add(lblfechanacimiento1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(4, 6, 5, 10);
+        panelRegistrarCliente.add(comboRol, gridBagConstraints);
+
+        lblfechanacimiento2.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        lblfechanacimiento2.setText("Genero:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 1, 0);
+        panelRegistrarCliente.add(lblfechanacimiento2, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(4, 6, 5, 10);
+        panelRegistrarCliente.add(comboGenero, gridBagConstraints);
+
         panelFoto.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         panelFoto.setToolTipText("Click para tomar foto");
 
@@ -217,7 +267,7 @@ public class RegistrarCliente extends javax.swing.JDialog {
         );
         panelFotoLayout.setVerticalGroup(
             panelFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 291, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         jToolBar1.setBackground(new java.awt.Color(255, 255, 255));
@@ -246,6 +296,11 @@ public class RegistrarCliente extends javax.swing.JDialog {
         btnHuella.setFocusable(false);
         btnHuella.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnHuella.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnHuella.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHuellaActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnHuella);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -266,8 +321,8 @@ public class RegistrarCliente extends javax.swing.JDialog {
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(panelRegistrarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(panelRegistrarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
+                    .addComponent(panelFoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -285,11 +340,17 @@ public class RegistrarCliente extends javax.swing.JDialog {
         cliente.setCorreo(cjcorreo.getText());
         cliente.setCodigopostal(cjcodigopostal.getText());
         cliente.setFechanacimiento(cjfechanacimiento.getDate());
-        
+        cliente.setFoto(panelFoto.getBytes());
+        cliente.setHuella(rh.getPlantillaHuella().serialize());
         if(cliente.registrarCliente(true)){
             System.exit(0);
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnHuellaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuellaActionPerformed
+        rh = new EnrrolarHuella(this, "Registre la huella 4 veces...", true);
+        rh.setVisible(true);
+    }//GEN-LAST:event_btnHuellaActionPerformed
 
     public static void main(String args[]) {
         try {
@@ -329,6 +390,8 @@ public class RegistrarCliente extends javax.swing.JDialog {
     private CompuChiqui.JTextFieldPopup cjidentificacion;
     private CompuChiqui.JTextFieldPopup cjnombre;
     private CompuChiqui.JTextFieldPopup cjtelefono;
+    private javax.swing.JComboBox<String> comboGenero;
+    private javax.swing.JComboBox<Rol> comboRol;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblapellido;
@@ -337,6 +400,8 @@ public class RegistrarCliente extends javax.swing.JDialog {
     private javax.swing.JLabel lblcorreo;
     private javax.swing.JLabel lbldireccion;
     private javax.swing.JLabel lblfechanacimiento;
+    private javax.swing.JLabel lblfechanacimiento1;
+    private javax.swing.JLabel lblfechanacimiento2;
     private javax.swing.JLabel lblnombre;
     private javax.swing.JLabel lbltelefono;
     private JPanelWebCam.JPanelWebCam panelFoto;
