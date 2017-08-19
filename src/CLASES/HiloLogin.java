@@ -32,7 +32,8 @@ public class HiloLogin extends SwingWorker<Void, Boolean>{
             String sql = "SELECT * FROM usuario INNER JOIN rol USING(idrol) WHERE usuario='"+user+"' AND pass='"+pass+"' ";            
             rs = st.executeQuery(sql);
             if(rs.next()){
-                Usuario usuario = new Usuario();
+                Usuario usuario = Usuario.getUsuario();
+                usuario.setIdusuario(rs.getInt("idusuario"));
                 usuario.setNombreusuario(rs.getString("nombreusuario"));
                 usuario.setUsername(rs.getString("usuario"));
                 usuario.setPassword(rs.getString("pass"));

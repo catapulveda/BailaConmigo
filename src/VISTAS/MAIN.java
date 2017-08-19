@@ -1,20 +1,46 @@
 package VISTAS;
 
-import DIALOGOS.RegistrarCliente;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Properties;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 public class MAIN extends javax.swing.JFrame {
 
+    PANELES.PanelClientes panelCliente;
+    
     public MAIN() {
         initComponents();
         
         setTitle("Bienvenido "+MODEL.Usuario.getUsuario().getNombreusuario());
+        
+        panelCliente = new PANELES.PanelClientes();
+        panelCliente.setName(CLASES.Idioma.idioma().getProperty("panelcliente"));
+        
+        contenedor.add(panelCliente, 0);
+        contenedor.setIconAt(0, new ImageIcon(getClass().getResource("/imagenes/usuarios.png")));
+        
+        setExtendedState(MAXIMIZED_BOTH);
+        
+        Locale[] locales = Locale.getAvailableLocales();
+        for (Locale locale : locales) {
+            if(!locale.getCountry().isEmpty()){
+                System.out.print(locale.getCountry());
+                System.out.print(" - ");
+                System.out.print(locale.getDisplayCountry());
+                System.out.print(" - ");
+                System.out.print(locale.getDisplayLanguage());
+                System.out.print(" - ");
+                System.out.print(locale.getDisplayName());
+                System.out.print(" - ");
+                System.out.println(locale.getLanguage());
+            }
+        }
     }
 
     
@@ -22,7 +48,7 @@ public class MAIN extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        contenedor = new javax.swing.JTabbedPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -30,13 +56,6 @@ public class MAIN extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -62,17 +81,11 @@ public class MAIN extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1)
-                .addContainerGap(317, Short.MAX_VALUE))
+            .addComponent(contenedor, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1)
-                .addContainerGap(245, Short.MAX_VALUE))
+            .addComponent(contenedor, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
         );
 
         pack();
@@ -100,11 +113,6 @@ public class MAIN extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        RegistrarCliente rc = new RegistrarCliente(this, true);
-        rc.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -126,7 +134,7 @@ public class MAIN extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JTabbedPane contenedor;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;

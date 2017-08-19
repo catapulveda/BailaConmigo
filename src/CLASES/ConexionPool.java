@@ -21,6 +21,7 @@ public class ConexionPool {
              basicDataSource.setUsername(user);
              basicDataSource.setPassword(pass);
              basicDataSource.setUrl("jdbc:postgresql://139.59.149.43:5432/bailaconmigo");
+//             basicDataSource.setUrl("jdbc:postgresql://localhost:5432/bailaconmigo");
              basicDataSource.setMaxActive(200);
              basicDataSource.setMinIdle(50);
              basicDataSource.setMaxIdle(100);

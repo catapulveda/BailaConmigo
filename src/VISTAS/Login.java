@@ -34,7 +34,6 @@ public class Login extends javax.swing.JFrame {
     }
     
     public void entrar(){
-        Usuario cliente = new Usuario();
         HiloLogin hiloLogin = new HiloLogin();
         hiloLogin.setUser(cjusuario.getText());
         hiloLogin.setPass(cjpass.getText());

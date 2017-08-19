@@ -11,6 +11,7 @@ import java.awt.Dialog;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 public class EnrrolarHuella extends DIALOGOS.RegistrarHuella{
     
@@ -86,7 +87,7 @@ public class EnrrolarHuella extends DIALOGOS.RegistrarHuella{
         return enrollador;
     }
 
-    public DPFPTemplate getPlantillaHuella() {
+    public DPFPTemplate getPlantillaHuella() {        
         return plantillaHuella;
     }
 

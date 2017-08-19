@@ -9,6 +9,8 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 public class RegistrarCliente extends javax.swing.JDialog {
     
@@ -341,10 +343,22 @@ public class RegistrarCliente extends javax.swing.JDialog {
         cliente.setCodigopostal(cjcodigopostal.getText());
         cliente.setFechanacimiento(cjfechanacimiento.getDate());
         cliente.setFoto(panelFoto.getBytes());
-        cliente.setHuella(rh.getPlantillaHuella().serialize());
-        if(cliente.registrarCliente(true)){
-            System.exit(0);
+        cliente.setGenero(comboGenero.getSelectedItem().toString());
+        cliente.setIdrol(comboRol.getItemAt(comboRol.getSelectedIndex()).getIdrol());
+        if(rh!=null&&rh.getPlantillaHuella()==null){
+            cliente.setHuella(rh.getPlantillaHuella().serialize());
+        }else{
+            cliente.setHuella(null);
         }
+        (new Thread(){
+            @Override
+            public void run(){
+                DIALOGOS.RegistrarCliente.btnGuardar.setIcon(new ImageIcon(getClass().getResource("/imagenes/btncargando.gif")));
+                if(cliente.registrarCliente(true)){
+                    dispose();
+                }
+            }
+        }).start();        
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnHuellaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuellaActionPerformed
@@ -380,7 +394,7 @@ public class RegistrarCliente extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnGuardar;
+    public static javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnHuella;
     private CompuChiqui.JTextFieldPopup cjapellido;
     private CompuChiqui.JTextFieldPopup cjcodigopostal;

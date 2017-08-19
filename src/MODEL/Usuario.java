@@ -20,9 +20,6 @@ public class Usuario {
     
     private static Usuario usuario;
 
-    public Usuario() {
-    }
-    
     public static Usuario getUsuario() {
         if(usuario==null){
             usuario = new Usuario();

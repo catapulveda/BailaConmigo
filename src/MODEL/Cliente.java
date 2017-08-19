@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 public class Cliente extends Rol{
@@ -174,8 +175,7 @@ public class Cliente extends Rol{
         this.password = password;
     }
     
-    public boolean registrarCliente(boolean guardar){
-        
+    public boolean registrarCliente(boolean guardar){        
         if(getIdentificacion().isEmpty()){
             CLASES.Metodos.ADVERTENCIA(
                 CLASES.Idioma.idioma().getProperty("mensaje"), 
@@ -211,15 +211,15 @@ public class Cliente extends Rol{
                 sql += "INSERT INTO public.cliente(\n" +
                 "            identificacion, nombrecliente, apellidocliente, fechadenacimiento, \n" +
                 "            numerotelefonico, direccioncliente, correocliente, fechaderegistro, \n" +
-                "            idusuarioregistrador, codigopostal, huella, foto)\n" +
+                "            codigopostal, huella, foto, genero, idrol, idusuario)\n" +
                 "    VALUES ('"+getIdentificacion().trim()+"', '"+getNombre().trim()+"', '"+getApellido().trim()+"', '"+getFechanacimiento()+"', \n" +
                 "            '"+getTelefono()+"', '"+getDireccion()+"', '"+getCorreo()+"', '"+new java.util.Date()+"', \n" +
-                "            "+getIdusuario()+", '"+getCodigopostal()+"', ?, ?);";
+                "            '"+getCodigopostal()+"', ?, ?, '"+getGenero()+"' , "+getIdrol()+" , "+MODEL.Usuario.getUsuario().getIdusuario()+");";
             }else{
                 sql += "UPDATE cliente SET(\n" +
                 "     identificacion='"+getIdentificacion().trim()+"', nombrecliente='"+getNombre().trim()+"', apellidocliente='"+getApellido().trim()+"', \n" +
                 "     fechadenacimiento='"+getFechanacimiento()+"', numerotelefonico='"+getTelefono()+"', direccioncliente='"+getDireccion()+"', \n" +
-                "     correocliente='"+getCorreo()+"', idusuarioactualizador="+getIdusuario()+" , codigopostal='"+getCodigopostal()+"', huella=?, foto=? ";
+                "     correocliente='"+getCorreo()+"', codigopostal='"+getCodigopostal()+"', huella=?, foto=?, genero='"+getGenero()+"' , idrol="+getIdrol()+" ";
             }
             
             ConexionPool conexion = new ConexionPool();
@@ -227,9 +227,10 @@ public class Cliente extends Rol{
             try{
                 con = conexion.getDataSource().getConnection();
                 PreparedStatement pst = con.prepareStatement(sql);            
-                pst.setBinaryStream(1, new ByteArrayInputStream(foto), foto.length);
-                pst.setBinaryStream(2, (huella != null)?new ByteArrayInputStream(huella):null, (huella != null)?huella.length:0);
-                if(con.prepareStatement(sql).executeUpdate()>0){
+                pst.setBytes(1, huella);
+                pst.setBytes(2, foto);
+                                
+                if(pst.executeUpdate()>0){
                     return true;
                 }
             }catch(org.postgresql.util.PSQLException e){
@@ -239,6 +240,7 @@ public class Cliente extends Rol{
                 CLASES.Metodos.ERROR(CLASES.Idioma.idioma().getProperty("error"), e);
                 java.util.logging.Logger.getLogger(Cliente.class.getName()).log(java.util.logging.Level.SEVERE, null, e);
             }finally{
+                DIALOGOS.RegistrarCliente.btnGuardar.setIcon(new ImageIcon(getClass().getResource("/imagenes/guardar.png")));
                 try {con.close();} catch (SQLException ex) {Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);}
             }
         }
@@ -265,6 +267,42 @@ public class Cliente extends Rol{
         }
         
         return true;
-    }   
+    }
+    
+    public static String[] getColumnNames(){
+        return new String[]{
+            "",//ITEM
+            "",//IDENTIFICACION
+            "",//NOMBRE
+            "",//TELEFONO
+            "",//CORREO
+            "",//FECHA DE REGISTRO
+            ""//REGISTRADO POR
+        };
+    }
+    
+    public static Class[] getColumnClass(){
+        return new Class[]{
+            Integer.class,//ITEM
+            String.class,//IDENTIFICACION
+            String.class,//NOMBRE
+            String.class,//TELEFONO
+            String.class,//CORREO
+            String.class,//FECHA DE REGISTRO
+            String.class//REGISTRADO POR
+        };
+    }
+    
+    public static Boolean[] getColumnEditable(){
+        return new Boolean[]{
+            false,//ITEM
+            false,//IDENTIFICACION
+            false,//NOMBRE
+            false,//TELEFONO
+            false,//CORREO
+            false,//FECHA DE REGISTRO
+            false//REGISTRADO POR
+        };
+    }
     
 }

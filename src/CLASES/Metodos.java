@@ -7,13 +7,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Metodos {
     
+    static Locale locale = new Locale(CLASES.Idioma.getP().getProperty("lenguaje"), CLASES.Idioma.getP().getProperty("pais"));
+    static NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
+    
     public static void ERROR(String msj, Exception e){
         DesktopNotify.showDesktopMessage(msj, e.getMessage(), DesktopNotify.ERROR);
+        escribirFichero(e);
     }
     
     public static void ADVERTENCIA(String title, String msj){
@@ -50,5 +56,9 @@ public class Metodos {
         } catch (IOException ex) {
             Logger.getLogger(Metodos.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static String moneda(Object o){
+        return nf.format(o);
     }
 }

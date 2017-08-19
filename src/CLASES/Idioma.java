@@ -10,11 +10,11 @@ import java.util.logging.Logger;
 public class Idioma extends Properties{
     
     private static Idioma idioma;
+    private static Properties p = new Properties();
     
     public static Idioma idioma(){
         if(idioma==null){
-            idioma = new Idioma();
-            Properties p = new Properties();
+            idioma = new Idioma();            
             try {
                 p.load(new FileInputStream(new File("config.properties")));
                 idioma.getProperties(p.getProperty("idioma"));
@@ -23,6 +23,14 @@ public class Idioma extends Properties{
             }
         }
         return idioma;        
+    }
+
+    public static Properties getP() {
+        return p;
+    }
+
+    public static void setP(Properties aP) {
+        p = aP;
     }
     
     public void getProperties(String idioma){
