@@ -17,6 +17,7 @@ public class HiloLogin extends SwingWorker<Void, Boolean>{
     private String pass;
     private JLabel lbl;
     private boolean login = false;
+    private VISTAS.Login Vlogin;
     
     @Override
     protected Void doInBackground() throws Exception {
@@ -55,6 +56,7 @@ public class HiloLogin extends SwingWorker<Void, Boolean>{
     @Override
     protected void done() { 
         if(login){
+            Vlogin.dispose();
             VISTAS.MAIN.main(null);
         }        
     }
@@ -85,6 +87,10 @@ public class HiloLogin extends SwingWorker<Void, Boolean>{
 
     public void setLbl(JLabel lbl) {
         this.lbl = lbl;
+    }
+
+    public void setVlogin(VISTAS.Login Vlogin) {
+        this.Vlogin = Vlogin;
     }
     
 }
